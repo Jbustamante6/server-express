@@ -28,6 +28,10 @@ export default class Server {
         console.log('oyendo socket');
         this.io.on('connection', cliente =>{
             console.log('Nuevo cliente conectado');
+
+            cliente.on('disconnect', () =>{
+                console.log('Cliente desconectado')
+            })
         });
     }
 
