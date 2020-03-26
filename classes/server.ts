@@ -3,6 +3,8 @@ import { SERVER_PORT } from '../global/environment';
 import socketIO from 'socket.io';
 import http from 'http';
 import * as socket from  '../sockets/sockets';
+
+
 export default class Server {
     
     private static _instance: Server;
@@ -25,12 +27,15 @@ export default class Server {
     }
 
     private escucharSockets(){
-        console.log('oyendo socket');
+        // console.log('oyendo socket');
         this.io.on('connection', cliente =>{
-            console.log('Nuevo cliente conectado');
-
+           
+            
+            socket.conectar(cliente);
+            // console.log('Nuevo cliente conectado');
+            socket.usuario(cliente, this.io);            
+            
             socket.mensaje(cliente, this.io);
-            socket.usuario(cliente, this.io);
 
             socket.desconectar(cliente);
         });
