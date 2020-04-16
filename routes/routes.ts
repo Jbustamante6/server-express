@@ -2,9 +2,33 @@ import {Router, Request, Response} from 'express';
 import Server from '../classes/server';
 import { Socket } from 'socket.io';
 import { usuariosConectados } from '../sockets/sockets';
+import { GraficaData } from '../classes/grafica';
 
 
 const router = Router();
+
+const grafica = new GraficaData();
+
+router.get( '/graficas', (req: Request, res: Response) => {
+    res.json(
+        grafica.getDataGrafica()
+    );
+});
+
+router.post( '/graficas', (req: Request, res: Response) => {
+    
+    const mes = req.body.mes;
+    const valor = Number( req.body.valor );
+
+    grafica.incrementarValor(mes, valor);
+
+    const server = Server.instace;
+    server.io.emit('cambio-grafica', grafica.getDataGrafica());
+    
+    res.json(
+        grafica.getDataGrafica()
+    );
+});
 
 router.get('/mensajes', (req: Request, res: Response) =>{
     res.json({
